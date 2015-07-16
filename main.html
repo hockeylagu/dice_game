@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/cdn/jquery-2.1.4.min.js"></script>
+    <script src="js/display.js"></script>
+    <script src="js/logic.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/object.js"></script>
+    <script src="js/game.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="col-md-7">
+            <div class="row form-group">
+                <button class="btn btn-default" onclick="newGame()">New Game</button>
+            </div>
+            <div class="row">
+                <h3 id="playerName"></h3>
+            </div>
+            <div class="row form-group">
+                <button class="btn btn-primary" id="roll" onclick="roll()">Roll</button>
+                <button class="btn btn-primary" id="endTurn" onclick="endTurn()">End Turn</button>
+            </div>
+            <label>Dice</label>
+            <div class="dices">
+                <button class="dice btn btn-default" id="0" onclick="select(0)">1</button>
+                <button class="dice btn btn-default" id="1" onclick="select(1)">2</button>
+                <button class="dice btn btn-default" id="2" onclick="select(2)">3</button>
+                <button class="dice btn btn-default" id="3" onclick="select(3)">4</button>
+                <button class="dice btn btn-default" id="4" onclick="select(4)">5</button>
+                <button class="dice btn btn-default" id="5" onclick="select(5)">6</button>
+                <button class="dice btn btn-primary" id="turn" onclick="nextTurn()">Another</button>
+            </div>
+            <label>Score joueur :</label>
+            <p class="game" id="scorePlayer"></p>
+            <label>Score :</label>
+            <p class="game" id="score"></p>
+        </div>
+        <div class="col-md-5">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
