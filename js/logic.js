@@ -1,16 +1,19 @@
-function verifyCanRoll(game) {
-    if (game.currentPlayer.iceBreak) {
-        return verifyMakePoints(game.manche.scoreBrasse[game.manche.brasse], game.currentScore);
-    } else {
-        return game.manche.brasse < 2 && verifyMakePoints(game.manche.scoreBrasse[game.manche.brasse], game.currentScore);
+function verifyCanRoll(player, manche, currentScore) {
+    if (!manche.firstBrasse) {
+        if (player.iceBreak) {
+            return verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
+        } else {
+            return manche.brasse < 2 && verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
+        }
     }
+    return true;
 }
 
-function verifyCanScore(game) {
-    if (game.currentPlayer.iceBreak) {
-        return verifyMakePoints(game.manche.scoreBrasse[game.manche.brasse], game.currentScore);
+function verifyCanScore(player, manche, currentScore) {
+    if (player.iceBreak) {
+        return verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
     } else {
-        return game.manche.score + game.currentScore >= 500;
+        return manche.score + currentScore >= 500;
     }
 }
 
@@ -18,11 +21,11 @@ function verifyMakePoints(lastScore, currentScore) {
     return currentScore > lastScore;
 }
 
-function verifyNextBrasse(game) {
-    if (game.currentPlayer.iceBreak) {
-        return verifyAllDiceMakePoints(game.hand)
+function verifyNextBrasse(player, manche, hand) {
+    if (player.iceBreak) {
+        return verifyAllDiceMakePoints(hand)
     } else {
-        return game.manche.brasse < 2 && verifyAllDiceMakePoints(game.hand)
+        return manche.brasse < 2 && verifyAllDiceMakePoints(hand)
     }
 }
 
@@ -45,6 +48,6 @@ function verifyAllDiceMakePoints(hand) {
     return true;
 }
 
-function verifyNextPlayer(game) {
-    return game.playerIndex + 1 > game.playerCounts - 1;
+function verifyNextTour(playerIndex, playerCounts) {
+    return playerIndex + 1 > playerCounts - 1;
 }

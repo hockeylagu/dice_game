@@ -47,6 +47,7 @@ function Player(name) {
 
 function Manche() {
     this.score = 0;
+    this.firstBrasse = true;
     this.brasse = 0;
     this.scoreBrasse = [0];
 }

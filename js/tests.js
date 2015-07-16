@@ -1,17 +1,20 @@
-d1 = new Dice();
+var d1 = new Dice();
 d1.face = 1;
-d2 = new Dice();
+var d2 = new Dice();
 d2.face = 2;
-d3 = new Dice();
+var d3 = new Dice();
 d3.face = 3;
-d4 = new Dice();
+var d4 = new Dice();
 d4.face = 4;
-d5 = new Dice();
+var d5 = new Dice();
 d5.face = 5;
-d6 = new Dice();
+var d6 = new Dice();
 d6.face = 6;
 
-hand = new Hand();
+var hand = new Hand();
+var player = new Player("test");
+var manche = new Manche();
+var currentScore = 0;
 
 QUnit.test("tests 2 same", function (assert) {
     hand.dices = [d1, d1, d2, d3, d4, d5];
@@ -181,4 +184,128 @@ QUnit.test("tests 3 same and 2(1) and 1(5) can roll again", function (assert) {
 QUnit.test("tests can not roll again", function (assert) {
     hand.dices = [d2, d1, d1, d4, d2, d1];
     assert.notOk(verifyAllDiceMakePoints(hand));
+});
+
+QUnit.test("tests ice breaked and make points should roll", function (assert) {
+    player.iceBreak = true;
+    manche.scoreBrasse = [0, 200];
+    manche.firstBrasse = false;
+    manche.brasse = 1;
+    currentScore = 750;
+    assert.ok(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice breaked and no points should not roll", function (assert) {
+    player.iceBreak = true;
+    manche.scoreBrasse = [0, 100];
+    manche.firstBrasse = false;
+    manche.brasse = 1;
+    currentScore = 0;
+    assert.notOk(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and brasse < 2 and make points should roll", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0, 200];
+    manche.firstBrasse = false;
+    manche.brasse = 1;
+    currentScore = 750;
+    assert.ok(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and brasse = 0 should roll", function (assert) {
+    player.iceBreak = false;
+    manche.firstBrasse = true;
+    manche.brasse = 0;
+    currentScore = 0;
+    assert.ok(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and brasse < 2 and make no points not should roll", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0, 200];
+    manche.firstBrasse = false;
+    manche.brasse = 1;
+    currentScore = 0;
+    assert.notOk(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and brasse = 2 and no points should not roll", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0, 100];
+    manche.firstBrasse = false;
+    manche.brasse = 2;
+    currentScore = 0;
+    assert.notOk(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and brasse = 2 and make points should not roll", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0, 100];
+    manche.firstBrasse = false;
+    manche.brasse = 2;
+    currentScore = 750;
+    assert.notOk(verifyCanRoll(player, manche, currentScore));
+});
+
+QUnit.test("tests ice breaked and make points should score", function (assert) {
+    player.iceBreak = true;
+    manche.scoreBrasse = [0];
+    manche.brasse = 0;
+    currentScore = 750;
+    assert.ok(verifyCanScore(player, manche, currentScore));
+});
+
+QUnit.test("tests ice breaked and no points should not score", function (assert) {
+    player.iceBreak = true;
+    manche.scoreBrasse = [0];
+    manche.firstBrasse = true;
+    manche.brasse = 0;
+    currentScore = 0;
+    assert.notOk(verifyCanScore(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and no points should not score", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0];
+    manche.firstBrasse = true;
+    manche.brasse = 0;
+    currentScore = 0;
+    assert.notOk(verifyCanScore(player, manche, currentScore));
+});
+
+QUnit.test("tests ice not breaked and make points should score", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0];
+    manche.brasse = 0;
+    currentScore = 750;
+    assert.ok(verifyCanScore(player, manche, currentScore));
+});
+
+QUnit.test("tests ice breaked and all dices make points should can reroll", function (assert) {
+    player.iceBreak = true;
+    manche.firstBrasse = true;
+    manche.brasse = 0;
+    hand.dices = [d1, d1, d1, d1, d1, d1];
+    assert.ok(verifyNextBrasse(player, manche, hand));
+});
+
+QUnit.test("tests ice not breaked and brasse < 2 and all dices make points should can reroll", function (assert) {
+    player.iceBreak = false;
+    manche.firstBrasse = true;
+    manche.brasse = 0;
+    hand.dices = [d1, d1, d1, d1, d1, d1];
+    assert.ok(verifyNextBrasse(player, manche, hand));
+});
+
+QUnit.test("tests ice not breaked and brasse = 2 and all dices make points should not can reroll", function (assert) {
+    player.iceBreak = false;
+    manche.firstBrasse = false;
+    manche.brasse = 2;
+    hand.dices = [d1, d1, d1, d1, d1, d1];
+    assert.notOk(verifyNextBrasse(player, manche, hand));
+});
+
+QUnit.test("tests is next tour", function (assert) {
+    assert.ok(verifyNextTour(1, 2));
 });

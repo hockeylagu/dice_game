@@ -6,12 +6,12 @@ var game;
 
 function roll() {
     game.manche.brasse++;
+    game.manche.firstBrasse = false;
     game.hand.roll();
 
     game.manche.scoreBrasse[game.manche.brasse] = game.currentScore;
 
-    displayDices(game.hand);
-    displayButton(false);
+    display(game);
 }
 
 function toggleDiceSelected(hand, id) {
@@ -22,12 +22,12 @@ function toggleDiceSelected(hand, id) {
 function select(id) {
     toggleDiceSelected(game.hand, id);
     game.currentScore = calculateScore(game.hand.getSelected());
-    display(game.hand, game.currentPlayer, game.manche.score + game.currentScore, verifyCanRoll(game));
+    display(game);
 }
 
 function reset() {
     game.reset();
-    display(game.hand, game.currentPlayer, 0, true);
+    display(game);
 }
 
 function newGame() {
@@ -37,14 +37,14 @@ function newGame() {
 }
 
 function endTurn() {
-    if (verifyCanScore(game)) {
+    if (verifyCanScore(game.currentPlayer, game.manche, game.currentScore)) {
         game.currentPlayer.iceBreak = true;
         game.currentPlayer.score += game.manche.score + game.currentScore;
     }
 
     displayPlayerScore(game.tour, game.currentPlayer);
 
-    if (verifyNextPlayer(game)) {
+    if (verifyNextTour(game.playerIndex, game.playerCounts)) {
         game.tour++;
         tableNewLine(game);
     }
@@ -56,6 +56,7 @@ function endTurn() {
 function nextTurn() {
     game.hand = new Hand();
     game.manche.score += game.currentScore;
+    game.manche.firstBrasse = true;
     game.currentScore = 0;
-    display(game.hand, game.currentPlayer, game.manche.score, true);
+    display(game);
 }
