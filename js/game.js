@@ -16,7 +16,7 @@ function toggleDiceSelected(hand, id) {
 }
 
 function select(id) {
-    if(!started)
+    if(!game.started)
         return;
 
     toggleDiceSelected(game.hand, id);
