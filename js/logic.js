@@ -13,7 +13,7 @@ function verifyCanScore(player, manche, currentScore) {
     if (player.iceBreak) {
         return verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
     } else {
-        return manche.score + currentScore >= 500;
+        return (manche.score + currentScore) >= 500 && verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
     }
 }
 

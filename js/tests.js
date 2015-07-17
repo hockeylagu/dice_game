@@ -274,9 +274,19 @@ QUnit.test("tests ice not breaked and no points should not score", function (ass
     assert.notOk(verifyCanScore(player, manche, currentScore));
 });
 
+QUnit.test("tests ice not breaked and brasse = 1 and no points should not score", function (assert) {
+    player.iceBreak = false;
+    manche.scoreBrasse = [0,700];
+    manche.firstBrasse = false;
+    manche.brasse = 1;
+    currentScore = 0;
+    assert.notOk(verifyCanScore(player, manche, currentScore));
+});
+
 QUnit.test("tests ice not breaked and make points should score", function (assert) {
     player.iceBreak = false;
     manche.scoreBrasse = [0];
+    manche.firstBrasse = true;
     manche.brasse = 0;
     currentScore = 750;
     assert.ok(verifyCanScore(player, manche, currentScore));
