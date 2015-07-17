@@ -3,12 +3,28 @@ function display(game) {
     displayButtonRoll(verifyCanRoll(game.currentPlayer, game.manche, game.currentScore));
     displayDices(game.hand);
     displayButtonAnother(game.hand, verifyNextBrasse(game.currentPlayer, game.manche, game.hand));
-    displayScore(game.currentPlayer, game.currentScore);
+    displayScore(game.currentPlayer, game.manche, game.currentScore);
+}
+
+function displayInfo(info) {
+    $("#info").empty();
+    $("#info").append(info);
 }
 
 function displayPlayer(player) {
     $("#playerName").empty();
     $("#playerName").append(player.name);
+}
+
+function displayWinner(player) {
+    displayPlayer(player.name + " WON !!");
+}
+
+function displayScore(player, manche, score) {
+    $("#scorePlayer").empty();
+    $("#scorePlayer").append(player.score);
+    $("#score").empty();
+    $("#score").append(score+" ("+manche.score+")");
 }
 
 function displayButtonRoll(roll) {
@@ -24,13 +40,6 @@ function displayButtonAnother(hand, another) {
     if (hand.getSelected().dices.length == 6 && another) {
         $(".dice#turn").show();
     }
-}
-
-function displayScore(player, score) {
-    $("#scorePlayer").empty();
-    $("#scorePlayer").append(player.score);
-    $("#score").empty();
-    $("#score").append(score);
 }
 
 function displayDices(hand) {
@@ -50,26 +59,26 @@ function displayDices(hand) {
     }
 }
 
-function initTable(game) {
+function initTable(players) {
     var i;
-    $("table thead tr").empty();
-    $("table thead tr").append("<th>Tour</th>");
-    for (i = 0; i < game.players.length; i++) {
-        $("table thead tr").append("<th>" + game.players[i].name + "</th>");
+    $("table.score thead tr").empty();
+    $("table.score thead tr").append("<th>Turn</th>");
+    for (i = 0; i < players.length; i++) {
+        $("table.score thead tr").append("<th>" + players[i].name + "</th>");
     }
 
-    $("table tbody").empty();
-    tableNewLine(game);
+    $("table.score tbody").empty();
+    tableNewLine(1, players);
 }
 
-function tableNewLine(game) {
+function tableNewLine(tour, players) {
     var lineData = "";
-    for (i = 0; i < game.players.length; i++) {
-        lineData += "<td class=\"data" + game.players[i].name + "\"></td>";
+    for (i = 0; i < players.length; i++) {
+        lineData += "<td class=\"score" + players[i].id + "\"></td>";
     }
-    $("table tbody").append("<tr id=\"" + game.tour + "\"><td class=\"dataTour\">" + game.tour + "</td>" + lineData + "</tr>");
+    $("table.score tbody").append("<tr id=\"" + tour + "\"><td class=\"scoreTour\">" + tour + "</td>" + lineData + "</tr>");
 }
 
 function displayPlayerScore(tour, player) {
-    $("tr#" + tour + " td.data" + player.name).append(player.score);
+    $("tr#" + tour + " td.score" + player.id).append(player.score);
 }

@@ -319,3 +319,32 @@ QUnit.test("tests ice not breaked and brasse = 2 and all dices make points shoul
 QUnit.test("tests is next tour", function (assert) {
     assert.ok(verifyNextTour(1, 2));
 });
+
+QUnit.test("tests is game end player have more 10000 points", function (assert) {
+    player.score = 11000;
+    assert.ok(verifyEndGame(player));
+});
+
+QUnit.test("tests is the last turn", function (assert) {
+    assert.ok(verifyWinner(true, 1, 1));
+});
+
+QUnit.test("tests is not the last turn", function (assert) {
+    assert.notOk(verifyWinner(true, 1, 2));
+});
+
+QUnit.test("tests player 1 is the winner", function (assert) {
+    p1 = new Player("Test1");
+    p1.score = 15000;
+    p2 = new Player("Test2");
+    p2.score = 10000;
+    assert.equal(verifyWinnerPlayer([p1, p2]), p1);
+});
+
+QUnit.test("tests player 2 is the winner", function (assert) {
+    p1 = new Player("Test1");
+    p1.score = 9000;
+    p2 = new Player("Test2");
+    p2.score = 10000;
+    assert.equal(verifyWinnerPlayer([p1, p2]), p2);
+});

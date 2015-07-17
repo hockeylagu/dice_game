@@ -9,16 +9,16 @@ function verifyCanRoll(player, manche, currentScore) {
     return true;
 }
 
+function verifyMakePoints(lastScore, currentScore) {
+    return currentScore > lastScore;
+}
+
 function verifyCanScore(player, manche, currentScore) {
     if (player.iceBreak) {
         return verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
     } else {
         return (manche.score + currentScore) >= 500 && verifyMakePoints(manche.scoreBrasse[manche.brasse], currentScore);
     }
-}
-
-function verifyMakePoints(lastScore, currentScore) {
-    return currentScore > lastScore;
 }
 
 function verifyNextBrasse(player, manche, hand) {
@@ -50,4 +50,22 @@ function verifyAllDiceMakePoints(hand) {
 
 function verifyNextTour(playerIndex, playerCounts) {
     return playerIndex + 1 > playerCounts - 1;
+}
+
+function verifyEndGame(player) {
+    return player.score > 10000;
+}
+
+function verifyWinner(lastTurn, winnerId, playerId) {
+    return lastTurn && winnerId == playerId;
+}
+
+function verifyWinnerPlayer(players) {
+    var i, winner = players[0];
+    for (i = 1; i < players.length; i++) {
+        if (players[i].score > winner.score) {
+            winner = players[i];
+        }
+    }
+    return winner;
 }

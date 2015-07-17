@@ -1,7 +1,3 @@
-$(document).ready(function () {
-    $("p").append("hello");
-});
-
 var game;
 
 function roll() {
@@ -20,6 +16,9 @@ function toggleDiceSelected(hand, id) {
 }
 
 function select(id) {
+    if(!started)
+        return;
+
     toggleDiceSelected(game.hand, id);
     game.currentScore = calculateScore(game.hand.getSelected());
     display(game);
@@ -32,21 +31,39 @@ function reset() {
 
 function newGame() {
     game = new Game();
+    game.started = true;
+    initTable(game.players);
     reset();
-    initTable(game);
 }
 
 function endTurn() {
+    if (!game.started)
+        return;
+
+    if (verifyWinner(game.isLastTurn, game.nextPlayerId (), game.winnerPlayer)) {
+        game.winnerPlayer = verifyWinnerPlayer(game.players);
+        game.started = false;
+        displayWinner(game.winnerPlayer);
+        displayInfo("Play Again !");
+        return;
+    }
+
     if (verifyCanScore(game.currentPlayer, game.manche, game.currentScore)) {
         game.currentPlayer.iceBreak = true;
         game.currentPlayer.score += game.manche.score + game.currentScore;
+
+        if (verifyEndGame(game.currentPlayer)) {
+            game.isLastTurn = true;
+            game.winnerPlayer = game.currentPlayer.id;
+            displayInfo("Last Turn");
+        }
     }
 
     displayPlayerScore(game.tour, game.currentPlayer);
 
     if (verifyNextTour(game.playerIndex, game.playerCounts)) {
         game.tour++;
-        tableNewLine(game);
+        tableNewLine(game.tour, game.players);
     }
 
     game.nextPlayer();
